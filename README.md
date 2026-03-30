@@ -4,7 +4,7 @@
 
 ---
 
-## 📁 ファイル構成
+## 📁 ファイル構成(色々追加する前の情報なので色々ファイルないです)
 
 ```
 minisns/
@@ -49,17 +49,6 @@ CREATE USER 'minisns_user'@'localhost' IDENTIFIED BY 'パスワード';
 GRANT ALL PRIVILEGES ON minisns.* TO 'minisns_user'@'localhost';
 FLUSH PRIVILEGES;
 ```
-
-次に `schema.sql` をインポートします：
-
-```bash
-mysql -u minisns_user -p minisns < schema.sql
-```
-
-または、phpMyAdmin で `schema.sql` をインポート。
-
----
-
 ### 3. DB接続設定
 
 `includes/db.php` を編集して接続情報を設定してください：
@@ -72,6 +61,16 @@ define('DB_PASS', 'パスワード');     // パスワード（変更）
 ```
 
 ---
+
+次に `schema.sql` をインポートします：
+
+
+
+そこら辺全部setup_admin.phpにまとめたのでファイルのある場所にアクセスすると自動でテーブルが作れます！。
+
+---
+
+
 
 ### 4. 管理者アカウント作成
 
@@ -151,8 +150,7 @@ const max = 500;  // 500文字に変更
   - これは**抑止力**としての機能です
   - 完全な1端末1アカウント制御は技術的に不可能です
 
-- **メディア投稿は非対応**
-  - テキスト投稿のみです
+
 
 ---
 
