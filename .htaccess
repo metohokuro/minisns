@@ -1,0 +1,56 @@
+# .htaccess - Apacheセキュリティ設定
+
+# ===== セキュリティヘッダー =====
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
+# ===== ディレクトリリスティング禁止 =====
+Options -Indexes
+
+# ===== includes/にアクセス禁止 =====
+<Files "*.php">
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+<FilesMatch "^(db|auth|functions)\.php$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# includesディレクトリへの直接アクセス禁止
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^includes/ - [F,L]
+</IfModule>
+
+# ===== バックアップファイル保護 =====
+<FilesMatch "\.(bak|backup|sql|log|conf|config)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# ===== setup_admin.phpへのアクセス制限 =====
+# 本番環境では下記のコメントを外してアクセス制限を設定
+# <Files "setup_admin.php">
+#     Order Deny,Allow
+#     Deny from all
+#     Allow from 127.0.0.1
+# </Files>
+
+# ===== PHP設定 =====
+<IfModule mod_php8.c>
+    # エラー非表示（本番環境）
+    php_flag display_errors Off
+    php_flag log_errors On
+
+    # セッション設定
+    php_value session.cookie_httponly 1
+    php_value session.cookie_samesite Lax
+    php_value session.use_strict_mode 1
+</IfModule>
